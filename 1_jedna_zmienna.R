@@ -2,9 +2,6 @@
 
 # Analiza danych sondażowych w języku GNU R część 1. 
 
-# 3. Wizualizacja i analiza jednej zmiennej ilościowej 
-# 4. Statystyki opisowe jednej zmiennej ilościowej
-
 # 1. Zapoznanie ze środowiskiem GNU R i RStudio #### 
 
 # ładujemy potrzebne pakiety - gotowe funkcje i dane 
@@ -16,7 +13,10 @@ library(sjPlot)
 View(PogromcyDanych::diagnoza)
 View(PogromcyDanych::diagnozaDict)
 
-# przypisujemy dane do zmiennych (patrz panel "Environment")
+# pomoc (panel "Help" w RStudio)
+?diagnoza
+
+# przypisujemy dane do zmiennych (widzimy je w panelu "Environment")
 dane_diagnoza <- diagnoza
 slownik_diagnoza <- diagnozaDict
 
@@ -48,10 +48,11 @@ ggplot(data = dane_diagnoza, mapping = aes(x = eduk4_2013)) +
   geom_bar() + 
   coord_flip() # przekręcamy wykres dla czytelności 
 
+# możemy uprościć zapis argumentów funkcji, opuścić część przed "=" 
 ggplot(dane_diagnoza, aes(gp3)) + geom_bar() + 
   coord_flip()
 
-# czy ten wykres może być ładniejszy? tak! 
+# czy wykres słupkowy może być bardziej estetyczny? tak! 
 
 wykres_gp3 <- ggplot(dane_diagnoza, aes(gp3))
 wykres_gp3 + geom_bar(aes(fill = gp3)) + coord_flip() # kolorowe kategorie
@@ -83,6 +84,30 @@ sjmisc::frq(dane_diagnoza %>% # wybór zmiennych z select()
 ## gp64 - Pana wlasny (osobisty) dochod miesieczny netto (na reke)
 ## gp113 - p113 Ile przecietnie godzin w tygodniu Pan pracuje
 
+ggplot(dane_diagnoza, aes(gp64)) + geom_histogram()
+ggplot(dane_diagnoza, aes(gp113)) + geom_histogram()
+
+wykres_gp113 <- ggplot(dane_diagnoza, aes(gp113))
+
+# customisacja histogramu
+?geom_histogram
+
+wykres_gp113 + geom_histogram(colour = "white", binwidth = 10)
+
+# podejrzyjmy konkretne wartości
+dane_diagnoza %>% 
+  select(imie_2011, gp113) %>% 
+  filter(gp113 > 80) %>% 
+  arrange(-gp113)
+  
+# tabelka 
+table(dane_diagnoza$gp113 > 80)
+
+# gęstość zamiast częstości 
+wykres_gp113 + geom_density()
+
+# 4. Statystyki opisowe jednej zmiennej ilościowej #### 
+
 summary(dane_diagnoza$gp64)
 summary(dane_diagnoza$gp113)
 
@@ -90,11 +115,20 @@ mean(dane_diagnoza$gp64) # nie działa?
 mean(dane_diagnoza$gp64, na.rm = TRUE)
 median(dane_diagnoza$gp64, na.rm = TRUE)
 
-summary(dane_diagnoza %>% select(gp64, gp113))
+summary(select(dane_diagnoza, gp64, gp113))
 
-ggplot(dane_diagnoza, aes(gp64)) + geom_histogram()
-ggplot(dane_diagnoza, aes(gp113)) + geom_histogram()
+dane_diagnoza %>% # inny zapis, wynik jak w linii 118 
+  select(gp64, gp113) %>% 
+  summary()
 
-wykres_gp113 <- ggplot(dane_diagnoza, aes(gp113))
-wykres_gp113 + geom_density()
+# odchylenie standardowe - standard deviation 
+sd(dane_diagnoza$gp64, na.rm = TRUE)
 
+# odchylenie standardowe oznacza rozrzut, rozproszenie wartości zmiennej
+# odpowiada na pytanie: o ile średnio wartości są oddalone od średniej? 
+
+# pomocnik wizualny w zrozumieniu sd 
+# https://www.geogebra.org/m/qvuejma7 
+
+# zadanie ##### 
+# proszę przedstawić na wykresie rozkład zmiennej "status społeczno-zawodowy" 
