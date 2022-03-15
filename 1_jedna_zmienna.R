@@ -36,7 +36,7 @@ sjPlot::view_df(x = dane_diagnoza, show.frq = TRUE, show.prc = TRUE,
 # skupmy się na zmiennych: 
 ## plec - płeć
 ## eduk4_2013 - Poziom wykształcenia:4 kategorie 2013
-## gp3 - p3 Jak ocenia Pan swoje cale dotychczasowe zycie
+## gp3 - p3 Jak ocenia Pan/i swoje cale dotychczasowe zycie
 
 # wykresy słupkowe z pakietu ggplot, części tidyverse
 # lektura: https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations 
@@ -81,7 +81,7 @@ sjmisc::frq(dane_diagnoza %>% # wybór zmiennych z select()
 # 3. Wizualizacja i analiza jednej zmiennej ilościowej #### 
 
 # skupmy się na:
-## gp64 - Pana wlasny (osobisty) dochod miesieczny netto (na reke)
+## gp64 - Pani/a wlasny (osobisty) dochod miesieczny netto (na reke)
 ## gp113 - p113 Ile przecietnie godzin w tygodniu Pan pracuje
 
 ggplot(dane_diagnoza, aes(gp64)) + geom_histogram()
@@ -114,12 +114,37 @@ summary(dane_diagnoza$gp113)
 mean(dane_diagnoza$gp64) # nie działa?
 mean(dane_diagnoza$gp64, na.rm = TRUE)
 median(dane_diagnoza$gp64, na.rm = TRUE)
+median(dane_diagnoza$gp113, na.rm = TRUE)
 
 summary(select(dane_diagnoza, gp64, gp113))
 
 dane_diagnoza %>% # inny zapis, wynik jak w linii 118 
   select(gp64, gp113) %>% 
   summary()
+
+# średnia i mediana na histogramie
+md_gp64 <- median(dane_diagnoza$gp64, na.rm = TRUE)
+me_gp64 <- mean(dane_diagnoza$gp64, na.rm = TRUE)
+
+ggplot(dane_diagnoza, aes(gp64)) + 
+  geom_histogram(binwidth = 1000, fill = "gray", colour = "black") +
+  geom_vline(xintercept = md_gp64,      # dodajemy linię
+             colour = "blue") +
+  annotate("text",                        # dodajemy tekst
+           x = 20000,
+           y = 8000,
+           label = paste("Mediana =", md_gp64),
+           colour = "blue",
+           size = 5) +
+  geom_vline(xintercept = me_gp64,      # dodajemy linię
+             colour = "orange") +
+  annotate("text",                        # dodajemy tekst
+           x = 20000,
+           y = 7000,
+           label = paste("Średnia =", round(me_gp64, 2)),
+           colour = "orange",
+           size = 5) + 
+  theme_minimal()
 
 # odchylenie standardowe - standard deviation 
 sd(dane_diagnoza$gp64, na.rm = TRUE)
