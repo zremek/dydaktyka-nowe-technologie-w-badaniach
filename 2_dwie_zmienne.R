@@ -153,4 +153,43 @@ dane_diagnoza %>% # zaczynamy od danych
             n = n(), # tutaj liczymy częstość 
             NA_n = sum(is.na(lata_nauki_2013))) # częstość NA 
 
+# Trzy zmienne? czemu nie :) #####
 
+x_eduk_fill_plec + 
+  geom_bar(position = "fill") + 
+  coord_flip() +
+  facet_wrap(ggplot2::vars(gp29)) # trzecia zmienna - podział wykresu na panele
+
+ggplot(data = dane_diagnoza,
+       mapping = aes(x = eduk4_2013, y = lata_nauki_2013, fill = gp29)) + # trzecia zmienna jako fill
+  geom_boxplot() + 
+  coord_flip()
+
+# Cztery też są możliwe!
+ggplot(data = dane_diagnoza %>% filter(!is.na(plec)), # filtrowanie - płeć bez NA 
+       mapping = aes(x = eduk4_2013, y = lata_nauki_2013, fill = gp29)) + # trzecia zmienna jako fill
+  geom_boxplot() + 
+  coord_flip() + 
+  facet_wrap(ggplot2::vars(plec)) # czwarta zmienna - podział wykresu na panele
+
+# Przypadek specjalny - skala Likerta
+
+# możemy wizualizować skale jak każdą zmienną nominalną
+
+ggplot(data = dane_diagnoza, aes(x = gp54_01)) + 
+  geom_bar()
+
+ggplot(data = dane_diagnoza, aes(x = gp54_01, fill = plec)) + 
+  geom_bar(position = "dodge") + 
+  coord_flip()
+
+# możemy skorzystać z specjalnej funkcji pakietu sjPlot
+
+sjPlot::plot_likert(dane_diagnoza %>% 
+                      select(gp54_01:gp54_10), # wybór zmiennych
+                    cat.neutral = 4, # podajemy środek skali
+                    values = "hide") # chowamy etykietki z słupków 
+
+# Zadanie ####
+# Proszę pokazać, jak odpowiedzi na pyt. "p29 Co jest wedlug Pana wazniejsze w zyciu?"
+# zależą od płci osób uczestniczących w badaniu 
