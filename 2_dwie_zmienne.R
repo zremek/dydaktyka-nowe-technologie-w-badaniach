@@ -86,7 +86,31 @@ prop.table(tab_eduk_plec, margin = 2) %>% round(digits = 2) # z zaokrągleniem
 
 # elegancka tabela 
 
+expss::cross_cases(data = dane_diagnoza,
+                   cell_vars = eduk4_2013,
+                   col_vars = plec) # liczebności bezwzględne - "cases"
 
+expss::cross_cpct(data = dane_diagnoza, # liczebności względne tzn. % w kolumnach
+                  cell_vars = eduk4_2013,
+                  col_vars = plec, 
+                  total_statistic = "u_cpct") 
+# uwaga, domyślnie tylko ważne bez NA!
+
+# tabela liczebności bezwzględnych i %, uwzględnia NA, bez pustych wierszy, 
+# podsumowanie w wierszach i w kolumnach
+
+expss_output_viewer() # pokazujemy tabelę w karcie "Viewer"
+
+dane_diagnoza %>% # zaczynamy od zbioru danych
+  if_na("NA") %>% # każemy pokazać NA jako "NA"
+  tab_cells(eduk4_2013) %>% # zmienna zależna (wiersze)
+  tab_cols(plec, total()) %>% # zmienna niezależna (kolumny) oraz podsumowanie w kolumnach
+  tab_stat_cases(label = "n", total_statistic = "u_cases") %>% # obliczamy licz. bezwzgl., podajemy etykietę i rodzaj podsumowania
+  tab_stat_cpct(label = "% kol.", total_statistic = "u_cpct") %>% # j.w. dla % 
+  tab_pivot(stat_position = "inside_columns") %>% # sposób wyświetlenia liczebności bezwzgl. i %
+  drop_rc() # każemy usunąć puste wiersze 
+
+expss_output_default() # wracamy do domyślnego pokazania tabeli w konsoli 
 
 # Wizualizacja i analiza zależności między dwiema zmiennymi: nominalna vs. ilościowa #### 
 
@@ -95,4 +119,38 @@ prop.table(tab_eduk_plec, margin = 2) %>% round(digits = 2) # z zaokrągleniem
 
 ## zmienna ilościowa jest zmienną zależną
 ## ta zmienna przechowuje wyniki pomiaru, który chcemy "pokroić" na grupy 
+
+# wykres skrzynkowy (boxplot), tzw. skrzynka-wąsy
+
+ggplot(data = dane_diagnoza, mapping = aes(x = eduk4_2013, y = lata_nauki_2013)) +
+  geom_boxplot()
+
+# jak jest zbudowana skrzynka - https://www.spss-tutorials.com/boxplot-what-is-it/ 
+
+# histogram z podziałem na grupy 
+ggplot(data = dane_diagnoza, mapping = aes(x = lata_nauki_2013, fill = eduk4_2013)) +
+  geom_histogram()
+
+ggplot(data = dane_diagnoza, mapping = aes(x = lata_nauki_2013, fill = eduk4_2013)) +
+  geom_histogram(position = "dodge")
+
+# statystyki opisowe z podziałem na grupy 
+
+# sposób najprostszy
+
+by(data = dane_diagnoza$lata_nauki_2013,
+   INDICES = dane_diagnoza$eduk4_2013,
+   FUN = summary)
+
+# sposób bardziej elegancki 
+
+dane_diagnoza %>% # zaczynamy od danych
+  group_by(eduk4_2013) %>% # wskazujemy zmienną niezależną - grupującą
+  summarise(min = min(lata_nauki_2013, na.rm = TRUE), # wskazujemy kolejno jakie podsumowania liczymy - minimum
+            med = median(lata_nauki_2013, na.rm = TRUE), # mediana
+            mean = mean(lata_nauki_2013, na.rm = TRUE), # średnia arytmetyczna
+            max = max(lata_nauki_2013, na.rm = TRUE), # maksimum
+            n = n(), # tutaj liczymy częstość 
+            NA_n = sum(is.na(lata_nauki_2013))) # częstość NA 
+
 
