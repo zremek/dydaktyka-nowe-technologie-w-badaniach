@@ -6,4 +6,7 @@
 *.html
 *.jpg
 *.png
+*.xlsx
+*.sav
+*.csv
 /kolokwium_odp/
