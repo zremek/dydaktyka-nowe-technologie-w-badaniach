@@ -1,14 +1,16 @@
 
-
-# install.packages("tidyverse")
-# install.packages("PogromcyDanych")
-
 library(tidyverse)
 library(PogromcyDanych)
 
 dane_diagnoza <- PogromcyDanych::diagnoza
 
 z2 <- dane_diagnoza
+
+z7 <- z2 %>% filter(eduk4_2013 == "średnie")
+
+z7 <- filter(z2, eduk4_2013 == "średnie")
+
+z8 <- 8977
 
 dim(na.omit(z2))
 
