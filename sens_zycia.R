@@ -6,6 +6,9 @@ dane_diagnoza <- PogromcyDanych::diagnoza
 
 z2 <- dane_diagnoza
 
+ggplot(data = z2, mapping = aes( x = eduk4_2013, fill = gp54_02)) + geom_bar(Position = "fill") + coord_flip() + labs(labs = "Sens życia a wykształcenie")
+
+
 z7 <- z2 %>% filter(eduk4_2013 == "średnie")
 
 z7 <- filter(z2, eduk4_2013 == "średnie")
