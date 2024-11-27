@@ -45,8 +45,8 @@ df_recode %>% count(co_gastro, zamieszkanie)
 df_recode %>% count(co_obiekty_kult)
 df_recode %>% count(co_sztuka_ul)
 
-haven::write_sav(df_recode,
-                 "/Users/remek/OneDrive\ -\ Uniwersytet\ Łódzki/analiza\ w\ SPSS/fix_recoded_kwestionariusz_dane.sav")
+# haven::write_sav(df_recode,
+#                  "/Users/remek/OneDrive\ -\ Uniwersytet\ Łódzki/analiza\ w\ SPSS/fix_recoded_kwestionariusz_dane.sav")
 
 
 
