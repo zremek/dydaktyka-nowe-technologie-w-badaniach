@@ -1,4 +1,4 @@
-install.packages("ggstatsplot")
+# install.packages("ggstatsplot")
 library(ggstatsplot)
 
 library(PogromcyDanych)
