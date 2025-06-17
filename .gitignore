@@ -9,4 +9,6 @@
 *.xlsx
 *.sav
 *.csv
+*.log
+*.tex
 /kolokwium_odp/
