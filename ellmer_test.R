@@ -139,17 +139,17 @@ for (m in c("qwen2.5:14b", "mistral-small", "gemma3:12b")) {
 
 
 
-# for (m in c("qwen2.5:14b", "mistral-small", "gemma3:12b")) {
-#   chat <- chat_ollama(model = m)
-#   start <- proc.time()
-#   response <- chat$chat(paste0(
-#     "Here is a research paper:\n\n",
-#     pdf_combined,
-#     "\n\nSummarise the main research question, methods, and findings."
-#   ))
-#   elapsed <- round((proc.time() - start)["elapsed"], 1)
-#   cat(m, "->", response, "(", elapsed, "s)\n")
-# } # error! 
+for (m in c("qwen2.5:14b", "mistral-small", "gemma3:12b")) {
+  chat <- chat_ollama(model = m)
+  start <- proc.time()
+  response <- chat$chat(paste0(
+    "Here is a research paper:\n\n",
+    pdf_combined,
+    "\n\nSummarise the main research question, methods, and findings."
+  ))
+  elapsed <- round((proc.time() - start)["elapsed"], 1)
+  cat(m, "->", response, "(", elapsed, "s)\n")
+} # error!
 
 for (m in c("llama3.1:8b", "qwen2.5:14b", "mistral-small", "gemma3:12b")) {
   chat <- chat_ollama(model = m)
