@@ -118,3 +118,46 @@ arxiv_sum_chunks <- summarise_in_chunks(pdf_text, chat300)
 
 # save.image()
 
+# yt coding comparision #### 
+
+test_comment <- "tbh ten film był mega boring ale ten git moment na końcu to był 🔥🔥"
+
+for (m in c("qwen2.5:14b", "mistral-small", "gemma3:12b")) {
+  chat <- chat_ollama(model = m)
+  start <- proc.time()
+  response <- chat$chat(paste0(
+    "You are assisting academic social media research. ",
+    "Classify this Polish/English mixed social media comment into one of: ",
+    "POSITIVE, NEGATIVE, NEUTRAL, MIXED\n\n",
+    "Reply with the label only.\n\n",
+    "Comment: ", test_comment
+  ))
+  elapsed <- round((proc.time() - start)["elapsed"], 1)
+  cat(m, "->", response, "(", elapsed, "s)\n")
+}
+
+
+
+
+# for (m in c("qwen2.5:14b", "mistral-small", "gemma3:12b")) {
+#   chat <- chat_ollama(model = m)
+#   start <- proc.time()
+#   response <- chat$chat(paste0(
+#     "Here is a research paper:\n\n",
+#     pdf_combined,
+#     "\n\nSummarise the main research question, methods, and findings."
+#   ))
+#   elapsed <- round((proc.time() - start)["elapsed"], 1)
+#   cat(m, "->", response, "(", elapsed, "s)\n")
+# } # error! 
+
+for (m in c("llama3.1:8b", "qwen2.5:14b", "mistral-small", "gemma3:12b")) {
+  chat <- chat_ollama(model = m)
+  start <- proc.time()
+  response <- chat$chat(
+    "Tell me three jokes about sociologists"
+  )
+  elapsed <- round((proc.time() - start)["elapsed"], 1)
+  cat(m, " (", elapsed, "s)\n")
+} 
+
